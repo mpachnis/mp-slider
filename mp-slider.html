@@ -1,0 +1,352 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="mp-slider-styles.html">
+
+<!--
+
+    `mp-slider` is a simple web component image slider
+
+    ### Example
+
+        <mp-slider>
+            <div>
+                <img src="path_to_image" />
+                <span class="caption">
+                    <h3>Image Title</h3>
+                    <p>Image description</p>
+                </span>
+            </div>
+        </mp-slider>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="mp-slider">
+    <template>
+
+        <style>
+            :host {
+                --bullets-position-bottom: 0;
+            }
+
+            ::content #prev, ::content #next {
+                margin-bottom: var(--controls-margin-bottom);
+                bottom: var(--controls-position-bottom)
+            }
+            ::content #bullets {
+                bottom: var(--bullets-position-bottom)
+            }
+        </style>
+
+
+        <div id="container">
+            <div id="slider" on-mouseover="_pauseAutoPlay" on-mouseout="_resumeAutoPlay">
+                <content></content>
+            </div>
+
+            <template is="dom-if" if="{{controls}}">
+                <div id="prev" data-img="prev" on-tap="_prevSlide"></div>
+                <div id="next" data-img="next" on-tap="_nextSlide"></div>
+            </template>
+
+            <template is="dom-if" if="{{bullets}}">
+                <div>
+                    <ul id="bullets">
+                        <template is="dom-repeat" items="{{_images}}">
+                            <li on-mouseover="_showThumb">
+                                <a class="bullet" data-index$="{{index}}" on-tap="_updateSelected"></a>
+                                <div class="thumbPreview">
+                                    <img src="{{_selectedThumb}}" alt="">
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <template is="dom-if" if="{{showThumbs}}">
+                <div id="thumbs">
+                    <template is="dom-repeat" items="{{_thumbs}}">
+                        <div class$="{{item.class}} thumb">
+                            <img src="{{item.image}}"
+                                 data-index$="{{item.dataIndex}}"
+                                 on-click="_updateSelected" />
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: "mp-slider",
+
+            properties: {
+
+                // Show next and prev arrows in the slider
+                controls: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // show small dots under the slider
+                bullets: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // show the caption in the slider
+                caption: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // show thumbnails under the slider
+                showThumbs: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // start auto change image
+                autoPlay: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // set the interval time
+                timer: {
+                    type: Number,
+                    value: 5000,
+                    reflectToAttribute: true
+                },
+
+                _pauseOnHover: {
+                    type: Boolean,
+                    value: false
+                },
+
+                // holds the images
+                _images: {
+                    type: Array,
+                    value: [],
+                    reflectToAttribute: true
+                },
+
+                // holds the thumbnails
+                _thumbs: {
+                    type: Array,
+                    value: [],
+                    reflectToAttribute: true
+                },
+
+                // show an image preview when hovering on a bullet
+                _thumbPreview: {
+                    type: Array,
+                    value: [],
+                    computed: '_showThumb()'
+                },
+
+                _selectedThumb: {
+                    type: String,
+                    reflectToAttribute: true
+                },
+
+                _autoInternal: {
+                    type: String
+                }
+            },
+
+            ready: function() {
+                this._createSlider();
+
+                if (this.autoPlay) {
+                    this._autoPlaySlider();
+                }
+
+                if (this.caption) {
+                    this.customStyle['--bullets-position-bottom'] = "-10px";
+                    this.updateStyles();
+                }
+
+                if (this.showThumbs) {
+                    this.customStyle['--controls-margin-bottom'] = "0";
+                    this.customStyle['--controls-position-bottom'] = "51%";
+                    this.updateStyles();
+                }
+            },
+
+            attached: function() {
+                if (this.bullets) {
+                    this._changeBullet();
+                }
+
+                if (this.showThumbs) {
+                    this._createThumbs();
+                }
+            },
+
+            _createSlider: function() {
+                var self = this;
+                var container = this.$.slider;
+                this._thumbPreview;
+
+                this._images = [].slice.call(this.$.slider.children);
+                this.current = 0;
+
+                this._images.forEach(function(slide, i) {
+                    if (i === self.current) {
+                        self._images[i].classList.add("current");
+                    }
+                    self._thumbPreview.push(slide.firstElementChild);
+                    self._images[i].setAttribute("data-index", i);
+                    self._images[i].classList.add("slider-img");
+                });
+            },
+
+            _prevSlide: function() {
+                this._images[this.current].classList.remove("current");
+                this.current = this.current === 0 ? this._images.length - 1 : this.current - 1;
+                this._images[this.current].classList.add("current");
+
+                if (this.bullets) {
+                    this._changeBullet();
+                }
+
+                if (this.showThumbs) {
+                    this._changeThumb();
+                }
+            },
+
+            _nextSlide: function() {
+                this._images[this.current].classList.remove('current');
+                this.current = this.current === this._images.length - 1 ? 0 : this.current + 1;
+                this._images[this.current].classList.add('current');
+
+                if (this.bullets) {
+                    this._changeBullet();
+                }
+
+                if (this.showThumbs) {
+                    this._changeThumb();
+                }
+            },
+
+            // change image and update selected thumb and bullet
+            _updateSelected: function(e) {
+                var index = Polymer.dom(e).localTarget.getAttribute("data-index");
+
+                this._images[this.current].classList.remove("current");
+
+                if (this.bullets) {
+                    var dotsIndex = this.$$("#bullets").children;
+                    var prevDot = dotsIndex[this.current];
+                    var nextDot = dotsIndex[index];
+
+                    prevDot.firstElementChild.classList.remove("selected");
+                    nextDot.firstElementChild.classList.add("selected");
+                }
+
+                if (this.showThumbs) {
+                    var thumbIndex = this.$$("#thumbs").children;
+                    var prevThumb = thumbIndex[this.current];
+                    var nextThumb = thumbIndex[index];
+
+                    prevThumb.classList.remove("selected");
+                    nextThumb.classList.add("selected");
+                }
+
+                this.current = parseInt(index === this._images.length - 1 ? 0 : index);
+                this._images[this.current].classList.add("current");
+            },
+
+            // update selected bullet on next/prev method
+            _changeBullet: function() {
+                var bulletList = this.$$("#bullets").getElementsByTagName('li');
+
+                for (var i in Object.keys(bulletList)) {
+                    i = parseInt(i, 10);
+                    var currentDots = bulletList[i].firstElementChild;
+                    var dotsIndex = parseInt(bulletList[i].firstElementChild.getAttribute("data-index"));
+
+                    if (this.current !== dotsIndex) {
+                        currentDots.classList.remove("selected");
+                    }
+                    else {
+                        currentDots.classList.add("selected");
+                    }
+                }
+            },
+
+            _createThumbs: function() {
+                var self = this;
+                var thumbList = this.$$("#thumbs").getElementsByTagName('div');
+
+                this._thumbs = this._images.map(function(img, i) {
+                    return {
+                        image: img.firstElementChild.getAttribute('src'),
+                        class: i == self.current ? "selected" : "",
+                        dataIndex: i
+                    };
+                });
+            },
+
+            // show an image preview on bullet hover
+            _showThumb: function(e, i) {
+                var self = this;
+                var dotsIndex = parseInt(e.currentTarget.firstElementChild.getAttribute("data-index"));
+
+                this._thumbPreview.forEach(function(img, i) {
+                    if (dotsIndex === i) {
+                        return self._selectedThumb = img.getAttribute('src');
+                    }
+                });
+            },
+
+            // update selected thumb on next/prev method
+            _changeThumb: function() {
+                var thumbList = this.$$("#thumbs").getElementsByTagName('div');
+
+                for (var i in Object.keys(thumbList)) {
+                    i = parseInt(i, 10);
+                    var currentThumb = thumbList[i];
+                    var thumbsIndex = parseInt(thumbList[i].firstElementChild.getAttribute("data-index"));
+
+                    if (this.current !== thumbsIndex) {
+                        currentThumb.classList.remove("selected");
+                    }
+                    else {
+                        currentThumb.classList.add("selected");
+                    }
+                }
+            },
+
+            _autoPlaySlider: function() {
+                var self = this;
+                this._autoInternal = setInterval(function() {
+                    self._images[self.current].classList.remove("current");
+                    self.current = self.current === self._images.length - 1 ? 0 : self.current + 1;
+                    self._images[self.current].classList.add("current");
+                    self._changeBullet();
+                    self._changeThumb();
+                }, self.timer);
+            },
+
+            _pauseAutoPlay: function() {
+                var self = this;
+
+                if (this.autoPlay) {
+                    clearInterval(self._autoInternal);
+                }
+            },
+
+            _resumeAutoPlay: function() {
+                if(this.autoPlay) {
+                    this._autoPlaySlider();
+                }
+            }
+
+        });
+    </script>
+
+</dom-module>

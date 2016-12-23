@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html>
+<head>
+    <title>mp-slider test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../mp-slider.html">
+</head>
+<body>
+
+    <test-fixture id="mpSlider">
+        <template>
+            <mp-slider></mp-slider>
+        </template>
+    </test-fixture>
+
+    <script>
+    suite('mp-slider', function() {
+        var slider;
+
+        setup(function() {
+            slider = fixture('mpSlider');
+        });
+
+        test('instantiating the element works', function() {
+            assert.equal(slider.is, 'mp-slider');
+        });
+
+        test('check _images', function() {
+            expect(slider._images).to.be.an('array');
+        });
+
+        test('check _thumbs', function() {
+            expect(slider._thumbs).to.be.an('array');
+        });
+
+        test('set control attribute to false, then to true', function() {
+            slider.controls = true
+            assert.equal(slider.controls, true);
+
+            slider.controls = false
+            assert.equal(slider.controls, false);
+        });
+
+        test('set captions attribute to false, then to true', function() {
+            slider.captions = true
+            assert.equal(slider.captions, true);
+
+            slider.captions = false
+            assert.equal(slider.captions, false);
+        });
+
+        test('set bullets attribute to false, then to true', function() {
+            slider.bullets = true
+            assert.equal(slider.bullets, true);
+
+            slider.bullets = false
+            assert.equal(slider.bullets, false);
+        });
+
+        test('set showThumbs attribute to false, then to true', function() {
+            slider.showThumbs = true
+            assert.equal(slider.showThumbs, true);
+
+            slider.showThumbs = false
+            assert.equal(slider.showThumbs, false);
+        });
+
+    });
+    </script>
+</body>
+</html>

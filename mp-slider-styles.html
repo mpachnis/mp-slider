@@ -1,0 +1,296 @@
+<dom-module id="mp-slider-styles">
+    <style>
+        :root {
+            font-family: "Helvetica Neue", Helvetica;
+
+            --white-color: #fff;
+            --caption-background: rgba(0, 0, 0, 0.5);
+
+        }
+        #container {
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        #slider {
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #slider > div {
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transition: visibility 0s 200ms, opacity 500ms linear;
+        }
+
+            .slider-img {
+                width: 100%;
+                height: 100%;
+                position: relative;
+            }
+
+            .slider-img img {
+                width: 100%;
+                height: auto;
+                float: left;
+            }
+
+            .slider-img span.caption {
+                width: 100%;
+                background: var(--caption-background);
+                padding: 10px 20px;
+                position: absolute;
+                bottom: 0;
+                display: block;
+                box-sizing: border-box
+            }
+
+                .slider-img h3, .slider-img p {
+                    color: var(--white-color)
+                }
+
+                .slider-img h3 {
+                    font-size: 20px;
+                    margin: 10px 0;
+                    padding: 0
+                }
+
+                .slider-img p {
+                    font-size: 14px;
+                    margin: 5px;
+                    padding: 5px 0
+                }
+
+            .current {
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: static !important;
+                transition: visibility 0s 200ms, opacity 500ms linear !important;
+            }
+
+        #prev, #next {
+            width: 50px;
+            height: 100px;
+            background-color: rgba(0, 0, 0, .3);
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            cursor: pointer;
+            transition: all .4s ease-in-out
+        }
+
+        #prev:hover, #next:hover { background-color: rgba(0, 0, 0, .2) }
+
+        #prev { left: 0; border-radius: 0 5px 5px 0 }
+        #next { right: 0; border-radius: 5px 0 0 5px }
+
+        #prev::before, #prev::after,
+        #next::before, #next::after {
+            content: " ";
+            margin: -30px 0;
+            background: #949293;
+            position: absolute;
+            right: 0;
+            height: 30px;
+            width: 2px;
+            transform-origin: 50% 100% 0;
+            transition: transform .15s ease-out
+        }
+
+        #prev::before {
+            top: 50%;
+            left: 10px;
+            transform: rotate(45deg)
+        }
+
+        #prev::after {
+            left: 10px;
+            top: calc(50% + -1px);
+            transform: rotate(135deg)
+        }
+
+        #next::before {
+            top: 50%;
+            right: 10px;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg)
+        }
+
+        #next::after {
+            top: calc(50% + -1px);
+            right: 10px;
+            -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg)
+        }
+
+        #bullets {
+            height: 25px;
+            margin: 0 auto;
+            padding: 0;
+            text-align: center;
+            position: relative;
+            right: 0;
+            left: 0
+        }
+
+        #bullets li { display: inline-block; position: relative }
+
+            .bullet {
+                margin: 0 5px;
+                background-color: rgba(0, 0, 0, .6);
+                width: 15px;
+                height: 15px;
+                display: inline-block;
+                border-radius: 50%;
+                transition: all .4s ease-in-out
+            }
+
+                .bullet:hover {
+                    opacity: .8;
+                    cursor: pointer
+                }
+
+                .bullet.selected {
+                    background-color: rgba(0, 0, 0, 1);
+                    cursor: pointer
+                }
+
+            #bullets li .thumbPreview {
+                width: 120px;
+                height: 72px;
+                background: #fff;
+                padding: 5px;
+                position: absolute;
+                right: 0;
+                bottom: 35px;
+                left: -50px;
+                opacity: 0;
+                z-index: -1;
+                transition: opacity 1s, visibility 0s;
+                box-shadow: 0 0 10px 1px #999;
+                box-sizing: border-box;
+            }
+
+                #bullets li .thumbPreview:after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border: 7px solid transparent;
+                    border-color: transparent transparent #fff #fff;
+                    position: absolute;
+                    bottom: -3px;
+                    left: 55px;
+                    box-shadow: -2px 2px 10px -3px #999;
+                    transform: rotate(-45deg)
+                }
+
+                #bullets li .thumbPreview img {
+                    width: 110px;
+                    height: auto;
+                }
+
+            #bullets li:hover .thumbPreview {
+                display: block;
+                opacity: 1;
+                z-index: 2;
+                transition: opacity 1s, visibility 0s;
+            }
+
+        #thumbs {
+            margin: 0 auto;
+            display: flex;
+            position: relative;
+            right: 0;
+            left: 0;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            flex-direction: row;
+            -ms-flex-direction: row;
+            -webkit-flex-direction: row;
+            justify-content: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center
+        }
+
+            #thumbs div {
+                margin: 10px 15px 20px 0;
+                border: 5px solid rgba(0, 0, 0, .6);
+                display: inline-block;
+                overflow: hidden;
+                transition: all .3s ease-in-out
+            }
+
+                #thumbs div:hover {
+                    background: rgba(0, 0, 0, .8);
+                    cursor: pointer
+                }
+
+                #thumbs div:last-of-type {
+                    margin-right: 0
+                }
+
+                #thumbs div img {
+                    width: 100%;
+                    max-width: 110px;
+                    box-sizing: border-box;
+                    vertical-align: middle;
+                    transition: all .3s ease-in-out
+                }
+
+                    #thumbs div img:hover {
+                        transform: scale(1.2)
+                    }
+
+                #thumbs .selected {
+                    background: rgba(0, 0, 0, .8)
+                }
+
+                #thumbs .selected > img {
+                    transform: scale(1.2)
+                }
+
+        @media (max-width: 568px) {
+            .slider-img span.caption {
+                padding: 5px 20px;
+            }
+
+                .slider-img span.caption h3 {
+                    font-size: 16px;
+                }
+
+                .slider-img span.caption p {
+                    font-size: 12px;
+                }
+
+            #bullets li:hover .thumbPreview {
+                display: none;
+            }
+        }
+
+        @media (max-width: 414px) {
+
+            #prev, #next {
+                width: 40px;
+                height: 50px;
+                bottom: 53%;
+            }
+
+                #prev::before, #prev::after,
+                #next::before, #next::after {
+                    height: 20px;
+                    margin: -20px 0;
+                }
+
+            .slider-img span.caption {
+                display: none;
+            }
+        }
+
+    </style>
+</dom-module>
