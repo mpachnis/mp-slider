@@ -14,7 +14,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git@github.com:mpachnis/mp-slider.git"
+        "url": "https://github.com/mpachnis/mp-slider.git"
     },
     "dependencies": {
         "polymer": "Polymer/polymer#^1.6.0"

@@ -1,3 +1,6 @@
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/owner/my-element)
+
+
 ##&lt;mp-slider&gt;
 
 
@@ -20,23 +23,32 @@ Load the slider
 ```html
 <link rel="import" href="path_to_bower_components/mp-slider/mp-slider.html" />
 ```
-
-include this
+<!--
+```
+<custom-element-demo>
+    <template>
+        <link rel="import" href="mp-slider.html">
+    </template>
+</custom-element-demo>
+```
+-->
+add the slider element
 
 ```html
-<mp-slider>
+<mp-slider controls caption bullets show-thumbs>
     <div>
-        <img src="path_to_image" />
+        <img src="demo/images/img1.jpg" />
         <span class="caption">
-            <h3>Image Title</h3>
-            <p>Image description</p>
+            <h3>Kung Fu Panda</h3>
+            <p>Po and the legends of awesomeness</p>
         </span>
     </div>
+
     <div>
-        <img src="path_to_image" />
+        <img src="demo/images/img2.jpg" />
         <span class="caption">
-            <h3>Image Title</h3>
-            <p>Image description</p>
+            <h3>Despicable Me</h3>
+            <p>Gru, the trio of orphan girls and the minions</p>
         </span>
     </div>
 </mp-slider>
