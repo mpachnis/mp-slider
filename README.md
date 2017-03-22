@@ -1,7 +1,7 @@
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/mpachnis/mp-slider)
+[![Build Status](https://travis-ci.org/mpachnis/mp-slider.svg?branch=master)](https://travis-ci.org/mpachnis/mp-slider) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/mpachnis/mp-slider)
 
 
-##&lt;mp-slider&gt;
+### &lt;mp-slider&gt;
 
 
 ### Demo
@@ -28,10 +28,12 @@ Load the slider
 <custom-element-demo>
     <template>
         <link rel="import" href="mp-slider.html">
+        <next-code-block></next-code-block>
     </template>
 </custom-element-demo>
 ```
 -->
+
 add the slider element
 
 ```html
