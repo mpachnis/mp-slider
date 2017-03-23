@@ -1,32 +1,28 @@
 [![Build Status](https://travis-ci.org/mpachnis/mp-slider.svg?branch=master)](https://travis-ci.org/mpachnis/mp-slider) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/mpachnis/mp-slider)
 
 
-### &lt;mp-slider&gt;
+## &lt;mp-slider&gt;
 
 
-### Demo
+## Demo
 
 [mp-slider docs & demo](http://minas.pachnis.com/projects/mp-slider/bower_components/mp-slider/)
 
 
-### Install
+## Install
 
 ```bash
 # via bower
 $ bower install mp-slider
 ```
 
-### Usage
+## Usage
 
-Load the slider
-
-```html
-<link rel="import" href="path_to_bower_components/mp-slider/mp-slider.html" />
-```
 <!--
 ```
 <custom-element-demo>
     <template>
+        <script src="../webcomponentsjs/webcomponents-lite.js"></script>
         <link rel="import" href="mp-slider.html">
         <next-code-block></next-code-block>
     </template>
