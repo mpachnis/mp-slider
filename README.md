@@ -9,14 +9,27 @@
 [mp-slider docs & demo](http://minas.pachnis.com/projects/mp-slider/bower_components/mp-slider/)
 
 
-## Install
+## Install the component using [Bower](http://bower.io/):
 
 ```bash
-# via bower
-$ bower install mp-slider
+$ bower install --save mp-slider
 ```
 
 ## Usage
+
+1. Import Web Components' polyfill:
+
+```html
+<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+```
+
+2. Import Custom Element:
+
+```html
+<link rel="import" href="bower_components/mp-slider/mp-slider.html">
+```
+
+3. Start using it!
 
 <!--
 ```
@@ -29,8 +42,6 @@ $ bower install mp-slider
 </custom-element-demo>
 ```
 -->
-
-add the slider element
 
 ```html
 <mp-slider controls caption bullets show-thumbs>
@@ -52,6 +63,6 @@ add the slider element
 </mp-slider>
 ```
 
-### License
+## License
 
 MIT License
