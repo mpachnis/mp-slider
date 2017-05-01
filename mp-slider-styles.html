@@ -2,11 +2,14 @@
     <style>
         :root {
             font-family: "Helvetica Neue", Helvetica;
+            width: 100%;
+
+            position: relative;
 
             --white-color: #fff;
             --caption-background: rgba(0, 0, 0, 0.5);
-
         }
+
         #container {
             position: relative;
             box-sizing: border-box;
@@ -18,7 +21,7 @@
             overflow: hidden;
         }
 
-        #slider > div {
+        #slider ::content > div {
             position: absolute;
             opacity: 0;
             visibility: hidden;
@@ -31,39 +34,13 @@
                 position: relative;
             }
 
-            .slider-img img {
+            ::content .slider-img img {
                 width: 100%;
                 height: auto;
                 float: left;
             }
 
-            .slider-img span.caption {
-                width: 100%;
-                background: var(--caption-background);
-                padding: 10px 20px;
-                position: absolute;
-                bottom: 0;
-                display: block;
-                box-sizing: border-box
-            }
-
-                .slider-img h3, .slider-img p {
-                    color: var(--white-color)
-                }
-
-                .slider-img h3 {
-                    font-size: 20px;
-                    margin: 10px 0;
-                    padding: 0
-                }
-
-                .slider-img p {
-                    font-size: 14px;
-                    margin: 5px;
-                    padding: 5px 0
-                }
-
-            .current {
+            #slider ::content .current {
                 max-width: 100%;
                 width: 100%;
                 height: auto;
@@ -82,10 +59,11 @@
             top: 0;
             bottom: 0;
             cursor: pointer;
+            z-index: 50;
             transition: all .4s ease-in-out
         }
 
-        #prev:hover, #next:hover { background-color: rgba(0, 0, 0, .2) }
+        #prev:hover, #next:hover { background-color: rgba(0, 0, 0, .5) }
 
         #prev { left: 0; border-radius: 0 5px 5px 0 }
         #next { right: 0; border-radius: 5px 0 0 5px }
@@ -136,28 +114,25 @@
             text-align: center;
             position: relative;
             right: 0;
-            left: 0
+            bottom: -10px;
+            left: 0;
         }
 
         #bullets li { display: inline-block; position: relative }
 
             .bullet {
                 margin: 0 5px;
-                background-color: rgba(0, 0, 0, .6);
+                background-color: rgba(0, 0, 0, .5);
                 width: 15px;
                 height: 15px;
                 display: inline-block;
                 border-radius: 50%;
+                box-shadow: inset 0 1px 1px 1px rgba(0, 0, 0, .5), -1px -1px 1px rgba(0, 0, 0, .5);
                 transition: all .4s ease-in-out
             }
 
-                .bullet:hover {
-                    opacity: .8;
-                    cursor: pointer
-                }
-
-                .bullet.selected {
-                    background-color: rgba(0, 0, 0, 1);
+                .bullet:hover, .bullet.selected {
+                    background-color: rgba(0, 0, 0, .7);
                     cursor: pointer
                 }
 
@@ -291,6 +266,5 @@
                 display: none;
             }
         }
-
     </style>
 </dom-module>

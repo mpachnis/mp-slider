@@ -31,6 +31,8 @@ $ bower install --save mp-slider
 
 3. Start using it!
 
+    Wrap the image in a div. To add caption to your image just include the 'mp-caption' element with slider-header, slide-content properties.
+
 <!--
 ```
 <custom-element-demo>
@@ -44,21 +46,17 @@ $ bower install --save mp-slider
 -->
 
 ```html
-<mp-slider controls caption bullets show-thumbs>
+<mp-slider controls bullets show-thumbs>
     <div>
         <img src="demo/images/img1.jpg" />
-        <span class="caption">
-            <h3>Kung Fu Panda</h3>
-            <p>Po and the legends of awesomeness</p>
-        </span>
+        <mp-caption slider-header="Kung Fu Panda"
+                    slider-content="Po and the legends of awesomeness">
+        </mp-caption>
     </div>
 
     <div>
         <img src="demo/images/img2.jpg" />
-        <span class="caption">
-            <h3>Despicable Me</h3>
-            <p>Gru, the trio of orphan girls and the minions</p>
-        </span>
+        <mp-caption slider-header="Despicable Me"></mp-caption>
     </div>
 </mp-slider>
 ```

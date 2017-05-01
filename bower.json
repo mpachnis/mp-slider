@@ -1,7 +1,7 @@
 {
     "name": "mp-slider",
     "description": "A simple web component image slider",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "homepage": "http://minas.pachnis.com",
     "authors": [
         "Minas Pachnis <minas@bugeffect.com>"

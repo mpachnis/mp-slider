@@ -1,0 +1,54 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="mp-caption">
+    <template>
+
+        <style>
+            :host {
+                --white-color: #fff;
+                --caption-background: rgba(0, 0, 0, 0.5);
+            }
+
+            #caption {
+                width: 100%;
+                background: var(--caption-background);
+                padding: 10px 20px;
+                position: absolute;
+                top: auto;
+                bottom: 0;
+                box-sizing: border-box;
+            }
+
+                #caption h3, #caption p {
+                    color: var(--white-color);
+                }
+
+                #caption h3 {
+                    font-size: 20px;
+                    margin: 10px 0;
+                    padding: 0
+                }
+
+                #caption p {
+                    font-size: 14px;
+                    margin: 5px;
+                }
+        </style>
+
+        <div id="caption">
+            <h3>{{sliderHeader}}</h3>
+            <p>{{sliderContent}}</p>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: "mp-caption",
+
+            properties: {
+                sliderHeader: String,
+                sliderContent: String
+            }
+        });
+    </script>
+</dom-module>
