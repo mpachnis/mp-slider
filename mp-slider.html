@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="mp-caption.html">
 <link rel="import" href="mp-slider-styles.html">
 
 <!--
@@ -22,7 +23,7 @@
 
 <dom-module id="mp-slider">
     <template>
-
+        <style is="custom-style" include="mp-slider-styles"></style>
         <style>
             :host {
                 --bullets-position-bottom: 0;
@@ -32,15 +33,15 @@
                 margin-bottom: var(--controls-margin-bottom);
                 bottom: var(--controls-position-bottom)
             }
-            ::content #bullets {
-                bottom: var(--bullets-position-bottom)
-            }
         </style>
-
 
         <div id="container">
             <div id="slider" on-mouseover="_pauseAutoPlay" on-mouseout="_resumeAutoPlay">
+                <slot></slot> <!-- ??? -->
                 <content></content>
+                <template is="dom-if" if="{{caption}}">
+                    <mp-caption><mp-caption>
+                </template>
             </div>
 
             <template is="dom-if" if="{{controls}}">
@@ -117,8 +118,11 @@
                 // set the interval time
                 timer: {
                     type: Number,
-                    value: 5000,
-                    reflectToAttribute: true
+                    value: 5000
+                },
+
+                _current: {
+                    type: Number
                 },
 
                 _pauseOnHover: {
@@ -129,15 +133,13 @@
                 // holds the images
                 _images: {
                     type: Array,
-                    value: [],
-                    reflectToAttribute: true
+                    value: []
                 },
 
                 // holds the thumbnails
                 _thumbs: {
                     type: Array,
-                    value: [],
-                    reflectToAttribute: true
+                    value: []
                 },
 
                 // show an image preview when hovering on a bullet
@@ -148,13 +150,10 @@
                 },
 
                 _selectedThumb: {
-                    type: String,
-                    reflectToAttribute: true
+                    type: String
                 },
 
-                _autoInternal: {
-                    type: String
-                }
+                _autoInternal: String
             },
 
             ready: function() {
@@ -165,8 +164,7 @@
                 }
 
                 if (this.caption) {
-                    this.customStyle['--bullets-position-bottom'] = "-10px";
-                    this.updateStyles();
+                    this.fire('showCaption');
                 }
 
                 if (this.showThumbs) {
@@ -188,14 +186,12 @@
 
             _createSlider: function() {
                 var self = this;
-                var container = this.$.slider;
-                this._thumbPreview;
 
-                this._images = [].slice.call(this.$.slider.children);
-                this.current = 0;
+                this._images = [].slice.call(this.getEffectiveChildren());
+                this._current = 0;
 
                 this._images.forEach(function(slide, i) {
-                    if (i === self.current) {
+                    if (i === self._current) {
                         self._images[i].classList.add("current");
                     }
                     self._thumbPreview.push(slide.firstElementChild);
@@ -205,9 +201,9 @@
             },
 
             _prevSlide: function() {
-                this._images[this.current].classList.remove("current");
-                this.current = this.current === 0 ? this._images.length - 1 : this.current - 1;
-                this._images[this.current].classList.add("current");
+                this._images[this._current].classList.remove("current");
+                this._current = this._current === 0 ? this._images.length - 1 : this._current - 1;
+                this._images[this._current].classList.add("current");
 
                 if (this.bullets) {
                     this._changeBullet();
@@ -219,9 +215,11 @@
             },
 
             _nextSlide: function() {
-                this._images[this.current].classList.remove('current');
-                this.current = this.current === this._images.length - 1 ? 0 : this.current + 1;
-                this._images[this.current].classList.add('current');
+                var self = this;
+
+                this._images[this._current].classList.remove("current");
+                this._current = this._current === this._images.length - 1 ? 0 : this._current + 1;
+                this._images[this._current].classList.add("current");
 
                 if (this.bullets) {
                     this._changeBullet();
@@ -230,17 +228,19 @@
                 if (this.showThumbs) {
                     this._changeThumb();
                 }
+
+                this.fire('showCaption');
             },
 
             // change image and update selected thumb and bullet
             _updateSelected: function(e) {
                 var index = Polymer.dom(e).localTarget.getAttribute("data-index");
 
-                this._images[this.current].classList.remove("current");
+                this._images[this._current].classList.remove("current");
 
                 if (this.bullets) {
                     var dotsIndex = this.$$("#bullets").children;
-                    var prevDot = dotsIndex[this.current];
+                    var prevDot = dotsIndex[this._current];
                     var nextDot = dotsIndex[index];
 
                     prevDot.firstElementChild.classList.remove("selected");
@@ -249,45 +249,49 @@
 
                 if (this.showThumbs) {
                     var thumbIndex = this.$$("#thumbs").children;
-                    var prevThumb = thumbIndex[this.current];
+                    var prevThumb = thumbIndex[this._current];
                     var nextThumb = thumbIndex[index];
 
                     prevThumb.classList.remove("selected");
                     nextThumb.classList.add("selected");
                 }
 
-                this.current = parseInt(index === this._images.length - 1 ? 0 : index);
-                this._images[this.current].classList.add("current");
+                this._current = parseInt(index === this._images.length - 1 ? 0 : index);
+                this._images[this._current].classList.add("current");
             },
 
             // update selected bullet on next/prev method
             _changeBullet: function() {
-                var bulletList = this.$$("#bullets").getElementsByTagName('li');
+                this.async(function() {
+                    var bulletList = this.$$("#bullets").getElementsByTagName('li');
 
-                for (var i in Object.keys(bulletList)) {
-                    i = parseInt(i, 10);
-                    var currentDots = bulletList[i].firstElementChild;
-                    var dotsIndex = parseInt(bulletList[i].firstElementChild.getAttribute("data-index"));
+                    for (var i in Object.keys(bulletList)) {
+                        i = parseInt(i, 10);
+                        var currentDots = bulletList[i].firstElementChild;
+                        var dotsIndex = parseInt(bulletList[i].firstElementChild.getAttribute("data-index"));
 
-                    if (this.current !== dotsIndex) {
-                        currentDots.classList.remove("selected");
+                        if (this._current !== dotsIndex) {
+                            currentDots.classList.remove("selected");
+                        }
+                        else {
+                            currentDots.classList.add("selected");
+                        }
                     }
-                    else {
-                        currentDots.classList.add("selected");
-                    }
-                }
+                }, 10);
             },
 
             _createThumbs: function() {
-                var self = this;
-                var thumbList = this.$$("#thumbs").getElementsByTagName('div');
+                this.async(function() {
+                    var self = this;
+                    var thumbList = this.$$("#thumbs").getElementsByTagName('div');
 
-                this._thumbs = this._images.map(function(img, i) {
-                    return {
-                        image: img.firstElementChild.getAttribute('src'),
-                        class: i == self.current ? "selected" : "",
-                        dataIndex: i
-                    };
+                    this._thumbs = this._images.map(function(img, i) {
+                        return {
+                            image: img.firstElementChild.getAttribute('src'),
+                            class: i == self._current ? "selected" : "",
+                            dataIndex: i
+                        };
+                    });
                 });
             },
 
@@ -312,7 +316,7 @@
                     var currentThumb = thumbList[i];
                     var thumbsIndex = parseInt(thumbList[i].firstElementChild.getAttribute("data-index"));
 
-                    if (this.current !== thumbsIndex) {
+                    if (this._current !== thumbsIndex) {
                         currentThumb.classList.remove("selected");
                     }
                     else {
@@ -324,9 +328,9 @@
             _autoPlaySlider: function() {
                 var self = this;
                 this._autoInternal = setInterval(function() {
-                    self._images[self.current].classList.remove("current");
-                    self.current = self.current === self._images.length - 1 ? 0 : self.current + 1;
-                    self._images[self.current].classList.add("current");
+                    self._images[self._current].classList.remove("current");
+                    self._current = self._current === self._images.length - 1 ? 0 : self._current + 1;
+                    self._images[self._current].classList.add("current");
                     self._changeBullet();
                     self._changeThumb();
                 }, self.timer);
@@ -344,8 +348,20 @@
                 if(this.autoPlay) {
                     this._autoPlaySlider();
                 }
-            }
+            },
 
+            _animation: function(newValue, oldValue) {
+                if(newValue !== undefined) {
+                    this._images[newValue].style.zIndex = "10";
+                    this._images[newValue].style.transition = "transform 1s";
+                    this._images[newValue].style.transform = "translate3d(0, 0, 0)";
+                }
+
+                if(oldValue !== undefined) {
+                    this._images[oldValue].style.transition = "transform 1s";
+                    this._images[oldValue].style.transform = "translate3d(100%, 0, 0)";
+                }
+            }
         });
     </script>
 
