@@ -6,7 +6,7 @@
 
 ## Demo
 
-[mp-slider docs & demo](http://minas.pachnis.com/projects/mp-slider/bower_components/mp-slider/)
+[mp-slider docs & demo](https://www.webcomponents.org/element/mpachnis/mp-slider)
 
 
 ## Install the component using [Bower](http://bower.io/):
