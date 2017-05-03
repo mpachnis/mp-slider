@@ -11,10 +11,9 @@
         <mp-slider>
             <div>
                 <img src="path_to_image" />
-                <span class="caption">
-                    <h3>Image Title</h3>
-                    <p>Image description</p>
-                </span>
+                <mp-caption slider-header="Image header"
+                            slider-content="Image cotnent">
+                </mp-caption>
             </div>
         </mp-slider>
 
@@ -29,7 +28,7 @@
                 --bullets-position-bottom: 0;
             }
 
-            ::content #prev, ::content #next {
+            #prev, #next {
                 margin-bottom: var(--controls-margin-bottom);
                 bottom: var(--controls-position-bottom)
             }
@@ -37,7 +36,6 @@
 
         <div id="container">
             <div id="slider" on-mouseover="_pauseAutoPlay" on-mouseout="_resumeAutoPlay">
-                <slot></slot> <!-- ??? -->
                 <content></content>
                 <template is="dom-if" if="{{caption}}">
                     <mp-caption><mp-caption>
@@ -93,12 +91,6 @@
 
                 // show small dots under the slider
                 bullets: {
-                    type: Boolean,
-                    value: false
-                },
-
-                // show the caption in the slider
-                caption: {
                     type: Boolean,
                     value: false
                 },
@@ -163,10 +155,6 @@
                     this._autoPlaySlider();
                 }
 
-                if (this.caption) {
-                    this.fire('showCaption');
-                }
-
                 if (this.showThumbs) {
                     this.customStyle['--controls-margin-bottom'] = "0";
                     this.customStyle['--controls-position-bottom'] = "51%";
@@ -228,8 +216,6 @@
                 if (this.showThumbs) {
                     this._changeThumb();
                 }
-
-                this.fire('showCaption');
             },
 
             // change image and update selected thumb and bullet
