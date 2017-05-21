@@ -1,5 +1,40 @@
 <dom-module id="mp-slider-styles">
     <style>
+        @font-face {
+            font-family: 'arrows';
+            src: url('fonts/arrows.eot');
+            src: url('fonts/arrows.eot?#iefix') format('embedded-opentype'),
+            url('fonts/arrows.woff') format('woff'),
+            url('fonts/arrows.ttf') format('truetype'),
+            url('fonts/arrows.svg#fontawesomeregular') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .arrow-arrow-left:before {
+            content: "\61";
+        }
+        .arrow-arrow-right:before {
+            content: "\62";
+        }
+        .arrow-arrow-circle-right:before {
+            content: "\63";
+        }
+        .arrow-arrow-circle-left:before {
+            content: "\64";
+        }
+        .arrow-chevron-left:before {
+            content: "\65";
+        }
+        .arrow-chevron-right:before {
+            content: "\66";
+        }
+        .arrow-chevron-right-liht:before {
+            content: "\67";
+        }
+        .arrow-chevron-left-light:before {
+            content: "\68";
+        }
         :root {
             font-family: "Helvetica Neue", Helvetica;
             width: 100%;
@@ -53,6 +88,8 @@
         #prev, #next {
             width: 50px;
             height: 100px;
+            font-family: "arrows";
+            font-size: 54px;
             background-color: rgba(0, 0, 0, .3);
             margin: auto;
             position: absolute;
