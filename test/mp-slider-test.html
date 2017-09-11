@@ -26,10 +26,6 @@
             slider = fixture('mpSlider');
         });
 
-        test('instantiating the element works', function() {
-            assert.equal(slider.is, 'mp-slider');
-        });
-
         test('check _images', function() {
             expect(slider._images).to.be.an('array');
         });
