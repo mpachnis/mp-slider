@@ -1,38 +1,31 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <dom-module id="mp-caption">
     <template>
-
         <style>
-            :host {
-                --white-color: #fff;
-                --caption-background: rgba(0, 0, 0, 0.5);
-            }
-
             #caption {
                 width: 100%;
                 background: var(--caption-background);
-                padding: 10px 20px;
+                padding: 5px 20px;
                 position: absolute;
-                top: auto;
                 bottom: 0;
                 box-sizing: border-box;
+                transition: all 2s linear;
             }
 
-                #caption h3, #caption p {
-                    color: var(--white-color);
-                }
+            #caption h3, #caption p { color: var(--white-color) }
 
-                #caption h3 {
-                    font-size: 20px;
-                    margin: 10px 0;
-                    padding: 0
-                }
+            #caption h3 {
+                font-size: 20px;
+                margin: 10px 0;
+                padding: 0
+            }
 
-                #caption p {
-                    font-size: 14px;
-                    margin: 5px;
-                }
+            #caption p {
+                font-size: 14px;
+                margin: 5px;
+                padding: 5px 0
+            }
         </style>
 
         <div id="caption">
@@ -42,13 +35,20 @@
     </template>
 
     <script>
-        Polymer({
-            is: "mp-caption",
-
-            properties: {
-                sliderHeader: String,
-                sliderContent: String
+        class mpCaption extends Polymer.Element {
+            static get is() {
+                return 'mp-caption'
             }
-        });
+
+            static get properties() {
+                return {
+                    sliderHeader: String,
+                    sliderContent: String
+                }
+            }
+        }
+
+        customElements.define(mpCaption.is, mpCaption);
     </script>
+
 </dom-module>

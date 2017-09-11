@@ -3,16 +3,15 @@
 <link rel="import" href="mp-slider-styles.html">
 
 <!--
-
     `mp-slider` is a simple web component image slider
 
     ### Example
 
         <mp-slider>
             <div>
-                <img src="path_to_image" />
-                <mp-caption slider-header="Image header"
-                            slider-content="Image cotnent">
+                <img src="images/img1.jpg" />
+                <mp-caption slider-header="Kung Fu Panda"
+                            slider-content="Po and the legends of awesomeness">
                 </mp-caption>
             </div>
         </mp-slider>
@@ -22,192 +21,157 @@
 
 <dom-module id="mp-slider">
     <template>
-        <style is="custom-style" include="mp-slider-styles"></style>
-        <style>
-            :host {
-                --bullets-position-bottom: 0;
-            }
-
-            #prev, #next {
-                margin-bottom: var(--controls-margin-bottom);
-                bottom: var(--controls-position-bottom)
-            }
-        </style>
+        <style include="mp-slider-styles"></style>
 
         <div id="container">
-            <div id="slider" on-mouseover="_pauseAutoPlay" on-mouseout="_resumeAutoPlay">
-                <content></content>
-                <template is="dom-if" if="{{caption}}">
-                    <mp-caption><mp-caption>
-                </template>
+            <div id="slider">
+                <slot></slot>
             </div>
 
-            <template is="dom-if" if="{{controls}}">
-                <div id="prev" data-img="prev" on-tap="_prevSlide"></div>
-                <div id="next" data-img="next" on-tap="_nextSlide"></div>
-            </template>
+            <dom-if if="[[caption]]">
+                <template>
+                    <slot></slot>
+                </template>
+            </dom-if>
 
-            <template is="dom-if" if="{{bullets}}">
-                <div>
+            <dom-if if="[[controls]]">
+                <template>
+                    <div id="prev" data-img="prev" on-click="_prevSlide"></div>
+                    <div id="next" data-img="next" on-click="_nextSlide"></div>
+                </template>
+            </dom-if>
+
+            <dom-if if="[[bullets]]">
+                <template>
                     <ul id="bullets">
-                        <template is="dom-repeat" items="{{_images}}">
-                            <li on-mouseover="_showThumb">
-                                <a class="bullet" data-index$="{{index}}" on-tap="_updateSelected"></a>
-                                <div class="thumbPreview">
-                                    <img src="{{_selectedThumb}}" alt="">
-                                </div>
-                            </li>
-                        </template>
+                        <dom-repeat items="[[_images]]">
+                            <template>
+                                <li on-mouseover="_showThumb">
+                                    <a class="bullet" data-index$="[[index]]" on-click="_updateSelected"></a>
+                                    <div class="thumbPreview">
+                                        <img src="[[_selectedThumb]]" alt="">
+                                    </div>
+                                </li>
+                            </template>
+                        </dom-repeat>
                     </ul>
-                </div>
-            </template>
+                </template>
+            </dom-if>
 
-            <template is="dom-if" if="{{showThumbs}}">
-                <div id="thumbs">
-                    <template is="dom-repeat" items="{{_thumbs}}">
-                        <div class$="{{item.class}} thumb">
-                            <img src="{{item.image}}"
-                                 data-index$="{{item.dataIndex}}"
-                                 on-click="_updateSelected" />
-                        </div>
-                    </template>
-                </div>
-            </template>
+            <dom-if if="[[showThumbs]]">
+                <template>
+                    <div id="thumbs">
+                        <dom-repeat items="[[_thumbs]]">
+                            <template>
+                                <div class$="[[item.class]] thumb">
+                                    <img src="[[item.image]]"
+                                         data-index$="[[item.dataIndex]]"
+                                         on-click="_updateSelected" />
+                                </div>
+                            </template>
+                        </dom-repeat>
+                    </div>
+                </template>
+            </dom-if>
         </div>
-
     </template>
 
     <script>
-        Polymer({
-            is: "mp-slider",
+        class mpSlider extends Polymer.mixinBehaviors([Polymer.NeonAnimationBehavior], Polymer.Element) {
+            static get is() {
+                return 'mp-slider'
+            }
 
-            properties: {
+            static get properties() {
+                return {
+                    // Show slider arrow controls
+                    controls: Boolean,
 
-                // Show next and prev arrows in the slider
-                controls: {
-                    type: Boolean,
-                    value: false
-                },
+                    // show small dots under the slider
+                    bullets: Boolean,
 
-                // show small dots under the slider
-                bullets: {
-                    type: Boolean,
-                    value: false
-                },
+                    // show slider thumbnails
+                    showThumbs: Boolean,
 
-                // show thumbnails under the slider
-                showThumbs: {
-                    type: Boolean,
-                    value: false
-                },
+                    // start auto play slider
+                    autoPlay: Boolean,
 
-                // start auto change image
-                autoPlay: {
-                    type: Boolean,
-                    value: false
-                },
+                    // set the interval time
+                    timer: {
+                        type: Number,
+                        value: 5000
+                    },
 
-                // set the interval time
-                timer: {
-                    type: Number,
-                    value: 5000
-                },
+                    _pauseOnHover: Boolean,
 
-                _current: {
-                    type: Number
-                },
+                    // holds collection
+                    _images: {
+                        type: Array,
+                        value: []
+                    },
 
-                _pauseOnHover: {
-                    type: Boolean,
-                    value: false
-                },
+                    // thumbnail collection
+                    _thumbs: {
+                        type: Array,
+                        value: []
+                    },
 
-                // holds the images
-                _images: {
-                    type: Array,
-                    value: []
-                },
+                    // show an image preview when hovering on a bullet
+                    _thumbPreview: {
+                        type: Array,
+                        value: [],
+                        computed: '_showThumb(elem, i)'
+                    },
 
-                // holds the thumbnails
-                _thumbs: {
-                    type: Array,
-                    value: []
-                },
+                    // selected thumbnail
+                    _selectedThumb: String,
 
-                // show an image preview when hovering on a bullet
-                _thumbPreview: {
-                    type: Array,
-                    value: [],
-                    computed: '_showThumb()'
-                },
+                    _autoInternal: String
+                }
+            }
 
-                _selectedThumb: {
-                    type: String
-                },
+            constructor() {
+                super();
+            }
 
-                _autoInternal: String
-            },
+            connectedCallback() {
+                super.connectedCallback();
 
-            ready: function() {
                 this._createSlider();
 
-                if (this.autoPlay) {
-                    this._autoPlaySlider();
-                }
-
-                if (this.showThumbs) {
-                    this.customStyle['--controls-margin-bottom'] = "0";
-                    this.customStyle['--controls-position-bottom'] = "51%";
-                    this.updateStyles();
-                }
-            },
-
-            attached: function() {
                 if (this.bullets) {
-                    this._changeBullet();
+                    setTimeout(() => {
+                        this._changeBullet()
+                    }, 0);
                 }
 
                 if (this.showThumbs) {
                     this._createThumbs();
                 }
-            },
+            }
 
-            _createSlider: function() {
-                var self = this;
+            _createSlider() {
+                this._thumbPreview;
+                this._images = [].slice.call(this.children);
+                this.current = 0;
 
-                this._images = [].slice.call(this.getEffectiveChildren());
-                this._current = 0;
+                this._images.forEach((slide, i) => {
+                    this._thumbPreview.push(slide.firstElementChild);
+                    this._images[i].setAttribute("data-index", i);
+                    this._images[i].classList.add("slider-img");
+                    this._images[i].children[0].style.width = "100%"; // ::slotted(.slider-img img) is not supported???
+                    this._images[i].children[0].style.float = "left";
 
-                this._images.forEach(function(slide, i) {
-                    if (i === self._current) {
-                        self._images[i].classList.add("current");
+                    if (i === this.current) {
+                        this._images[i].classList.add("current");
                     }
-                    self._thumbPreview.push(slide.firstElementChild);
-                    self._images[i].setAttribute("data-index", i);
-                    self._images[i].classList.add("slider-img");
                 });
-            },
+            }
 
-            _prevSlide: function() {
-                this._images[this._current].classList.remove("current");
-                this._current = this._current === 0 ? this._images.length - 1 : this._current - 1;
-                this._images[this._current].classList.add("current");
-
-                if (this.bullets) {
-                    this._changeBullet();
-                }
-
-                if (this.showThumbs) {
-                    this._changeThumb();
-                }
-            },
-
-            _nextSlide: function() {
-                var self = this;
-
-                this._images[this._current].classList.remove("current");
-                this._current = this._current === this._images.length - 1 ? 0 : this._current + 1;
-                this._images[this._current].classList.add("current");
+            _prevSlide() {
+                this._images[this.current].classList.remove("current");
+                this.current = this.current === 0 ? this._images.length - 1 : this.current - 1;
+                this._images[this.current].classList.add("current");
 
                 if (this.bullets) {
                     this._changeBullet();
@@ -216,139 +180,110 @@
                 if (this.showThumbs) {
                     this._changeThumb();
                 }
-            },
+            }
+
+            _nextSlide() {
+                this._images[this.current].classList.remove('current');
+                this.current = this.current === this._images.length - 1 ? 0 : this.current + 1;
+                this._images[this.current].classList.add('current');
+
+                if (this.bullets) {
+                    this._changeBullet();
+                }
+
+                if (this.showThumbs) {
+                    this._changeThumb();
+                }
+            }
 
             // change image and update selected thumb and bullet
-            _updateSelected: function(e) {
-                var index = Polymer.dom(e).localTarget.getAttribute("data-index");
+            _updateSelected(e) {
+                var thumbIndex = e.currentTarget.dataset.index;
 
-                this._images[this._current].classList.remove("current");
+                this._images[this.current].classList.remove("current");
 
                 if (this.bullets) {
-                    var dotsIndex = this.$$("#bullets").children;
-                    var prevDot = dotsIndex[this._current];
-                    var nextDot = dotsIndex[index];
+                    var dotsList = this.shadowRoot.querySelector('#bullets').getElementsByTagName('li');
+                    var prevDot = dotsList[this.current];
+                    var nextDot = dotsList[thumbIndex];
 
                     prevDot.firstElementChild.classList.remove("selected");
                     nextDot.firstElementChild.classList.add("selected");
                 }
 
                 if (this.showThumbs) {
-                    var thumbIndex = this.$$("#thumbs").children;
-                    var prevThumb = thumbIndex[this._current];
-                    var nextThumb = thumbIndex[index];
+                    var thumbList = this.shadowRoot.querySelector('#thumbs').getElementsByTagName('div');
+                    var prevThumb = thumbList[this.current];
+                    var nextThumb = thumbList[thumbIndex];
 
                     prevThumb.classList.remove("selected");
                     nextThumb.classList.add("selected");
                 }
 
-                this._current = parseInt(index === this._images.length - 1 ? 0 : index);
-                this._images[this._current].classList.add("current");
-            },
+                this.current = parseInt(thumbIndex === this._images.length - 1 ? 0 : thumbIndex);
+                this._images[this.current].classList.add("current");
+            }
 
-            // update selected bullet on next/prev method
-            _changeBullet: function() {
-                this.async(function() {
-                    var bulletList = this.$$("#bullets").getElementsByTagName('li');
+            _changeBullet() {
+                const bulletList = this.shadowRoot.querySelector('#bullets').getElementsByTagName('li');
 
-                    for (var i in Object.keys(bulletList)) {
-                        i = parseInt(i, 10);
-                        var currentDots = bulletList[i].firstElementChild;
-                        var dotsIndex = parseInt(bulletList[i].firstElementChild.getAttribute("data-index"));
+                Object.keys(bulletList).forEach((i) => {
+                    i = parseInt(i, 10);
+                    const currentDots = bulletList[i].firstElementChild;
+                    const dotsIndex = parseInt(bulletList[i].firstElementChild.dataset.index);
 
-                        if (this._current !== dotsIndex) {
-                            currentDots.classList.remove("selected");
-                        }
-                        else {
-                            currentDots.classList.add("selected");
-                        }
+                    if (this.current !== dotsIndex) {
+                        currentDots.classList.remove("selected");
                     }
-                }, 10);
-            },
-
-            _createThumbs: function() {
-                this.async(function() {
-                    var self = this;
-                    var thumbList = this.$$("#thumbs").getElementsByTagName('div');
-
-                    this._thumbs = this._images.map(function(img, i) {
-                        return {
-                            image: img.firstElementChild.getAttribute('src'),
-                            class: i == self._current ? "selected" : "",
-                            dataIndex: i
-                        };
-                    });
+                    else {
+                        currentDots.classList.add("selected");
+                    }
                 });
-            },
+            }
+
+            _createThumbs() {
+                var thumbList;
+
+                this._thumbs = this._images.map((img, i) => {
+                    return {
+                        image: img.firstElementChild.getAttribute('src'),
+                        class: i == this.current ? "selected" : "",
+                        dataIndex: i
+                    };
+                });
+            }
 
             // show an image preview on bullet hover
-            _showThumb: function(e, i) {
+            _showThumb(elem, i) {
                 var self = this;
-                var dotsIndex = parseInt(e.currentTarget.firstElementChild.getAttribute("data-index"));
+                var dotsIndex = parseInt(elem.currentTarget.firstElementChild.getAttribute("data-index"));
 
-                this._thumbPreview.forEach(function(img, i) {
+                this._thumbPreview.forEach((img, i) => {
                     if (dotsIndex === i) {
                         return self._selectedThumb = img.getAttribute('src');
                     }
                 });
-            },
+            }
 
             // update selected thumb on next/prev method
-            _changeThumb: function() {
-                var thumbList = this.$$("#thumbs").getElementsByTagName('div');
+            _changeThumb() {
+                const thumbList = this.shadowRoot.querySelector('#thumbs').getElementsByTagName('div');
 
-                for (var i in Object.keys(thumbList)) {
+                Object.keys(thumbList).forEach((i) => {
                     i = parseInt(i, 10);
                     var currentThumb = thumbList[i];
                     var thumbsIndex = parseInt(thumbList[i].firstElementChild.getAttribute("data-index"));
 
-                    if (this._current !== thumbsIndex) {
+                    if (this.current !== thumbsIndex) {
                         currentThumb.classList.remove("selected");
                     }
                     else {
                         currentThumb.classList.add("selected");
                     }
-                }
-            },
-
-            _autoPlaySlider: function() {
-                var self = this;
-                this._autoInternal = setInterval(function() {
-                    self._images[self._current].classList.remove("current");
-                    self._current = self._current === self._images.length - 1 ? 0 : self._current + 1;
-                    self._images[self._current].classList.add("current");
-                    self._changeBullet();
-                    self._changeThumb();
-                }, self.timer);
-            },
-
-            _pauseAutoPlay: function() {
-                var self = this;
-
-                if (this.autoPlay) {
-                    clearInterval(self._autoInternal);
-                }
-            },
-
-            _resumeAutoPlay: function() {
-                if(this.autoPlay) {
-                    this._autoPlaySlider();
-                }
-            },
-
-            _animation: function(newValue, oldValue) {
-                if(newValue !== undefined) {
-                    this._images[newValue].style.zIndex = "10";
-                    this._images[newValue].style.transition = "transform 1s";
-                    this._images[newValue].style.transform = "translate3d(0, 0, 0)";
-                }
-
-                if(oldValue !== undefined) {
-                    this._images[oldValue].style.transition = "transform 1s";
-                    this._images[oldValue].style.transform = "translate3d(100%, 0, 0)";
-                }
+                });
             }
-        });
-    </script>
+        }
 
+        customElements.define(mpSlider.is, mpSlider);
+    </script>
 </dom-module>

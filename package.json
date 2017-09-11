@@ -1,0 +1,25 @@
+{
+    "name": "mp-slider",
+    "version": "2.0.0",
+    "description": "Is a web component image slider build with Polymer 2.0",
+    "author": "Minas Pachnis <minas@bugeffect.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mpachnis/mp-slider.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mpachnis/mp-slider/issues"
+    },
+    "homepage": "https://github.com/mpachnis/mp-slider",
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "bower": "latest",
+        "polymer-cli": "^1.2.0"
+    },
+    "scripts": {
+        "test": "wct"
+    }
+}

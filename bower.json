@@ -1,13 +1,15 @@
 {
     "name": "mp-slider",
-    "description": "A simple web component image slider",
-    "version": "0.1.3",
+    "description": "A simple web component image slider build with Polymer 2.0",
+    "version": "2.0.0",
     "homepage": "http://minas.pachnis.com",
     "authors": [
         "Minas Pachnis <minas@bugeffect.com>"
     ],
     "keywords": [
         "slider",
+        "carousel",
+        "mpachnis",
         "polymer",
         "web-components"
     ],
@@ -17,16 +19,20 @@
         "url": "https://github.com/mpachnis/mp-slider.git"
     },
     "dependencies": {
-        "polymer": "Polymer/polymer#^1.6.0"
+        "polymer": "^2.0.0"
     },
     "devDependencies": {
-        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-        "web-component-tester": "^4.0.0",
-        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+        "web-component-tester": "^6.0.0",
+        "iron-component-page": "^v2.0.0",
+        "iron-demo-helpers": "^v2.0.0",
+        "iron-test-helpers": "^v2.0.0",
+        "test-fixture": "^3.0.0-rc.1",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
     },
-    "resolutions": {
-        "polymer": "^1.2.4",
-        "webcomponentsjs": "^0.7.2"
-    }
+    "ignore": [
+        "node_modules",
+        "bower_components",
+        "package.json",
+        ".gitignore"
+    ]
 }
