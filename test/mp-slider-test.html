@@ -26,15 +26,7 @@
             slider = fixture('mpSlider');
         });
 
-        test('check _images', function() {
-            expect(slider._images).to.be.an('array');
-        });
-
-        test('check _thumbs', function() {
-            expect(slider._thumbs).to.be.an('array');
-        });
-
-        test('set control attribute to false, then to true', function() {
+        test('set control attribute to true, then to false', function() {
             slider.controls = true
             assert.equal(slider.controls, true);
 
@@ -42,7 +34,7 @@
             assert.equal(slider.controls, false);
         });
 
-        test('set captions attribute to false, then to true', function() {
+        test('set captions attribute to true, then to false', function() {
             slider.captions = true
             assert.equal(slider.captions, true);
 
