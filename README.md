@@ -66,6 +66,15 @@ $ bower install --save mp-slider
 </mp-slider>
 ```
 
+Available styles for customization.
+
+Properties | Description
+---------- | -----------
+--caption-background | Caption's background color
+--pause-icon-background | pause icon's background color
+--pause-icon-stroke-color | pause icon's color
+--pause-icon-stroker-width | pause icon's stroke width
+
 ## License
 
 MIT License

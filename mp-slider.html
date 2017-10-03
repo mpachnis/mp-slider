@@ -24,7 +24,12 @@
         <style include="mp-slider-styles"></style>
 
         <div id="container">
-            <div id="slider">
+            <div id="slider" on-mouseover="_pauseAutoPlay" on-mouseout="_resumeAutoPlay">
+                <div id="pauseIcon">
+                    <svg height="150" viewBox="0 0 1792 1792" width="150" fill="{{pauseColor}}" stroke="white" stroke-width="1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1664 192v1408q0 26-19 45t-45 19h-512q-26 0-45-19t-19-45v-1408q0-26 19-45t45-19h512q26 0 45 19t19 45zm-896 0v1408q0 26-19 45t-45 19h-512q-26 0-45-19t-19-45v-1408q0-26 19-45t45-19h512q26 0 45 19t19 45z"/>
+                    </svg>
+                </div>
                 <slot></slot>
             </div>
 
@@ -97,9 +102,14 @@
                     autoPlay: Boolean,
 
                     // set the interval time
-                    timer: {
+                    interval: {
                         type: Number,
                         value: 5000
+                    },
+
+                    pauseColor: {
+                        type: String,
+                        value: "#fff"
                     },
 
                     _pauseOnHover: Boolean,
@@ -147,6 +157,10 @@
 
                 if (this.showThumbs) {
                     this._createThumbs();
+                }
+
+                if (this.autoPlay) {
+                    this._autoPlaySlider();
                 }
             }
 
@@ -281,6 +295,31 @@
                         currentThumb.classList.add("selected");
                     }
                 });
+            }
+
+            _autoPlaySlider() {
+                // var self = this;
+                this._autoInternal = setInterval(() => {
+                    this._images[this.current].classList.remove("current");
+                    this.current = this.current === this._images.length - 1 ? 0 : this.current + 1;
+                    this._images[this.current].classList.add("current");
+                    this._changeBullet();
+                    this._changeThumb();
+                }, this.interval);
+            }
+
+            _pauseAutoPlay() {
+                if (this.autoPlay) {
+                    clearInterval(this._autoInternal);
+                    this.$.pauseIcon.style.opacity = .5;
+                }
+            }
+
+            _resumeAutoPlay() {
+                if(this.autoPlay) {
+                    this._autoPlaySlider();
+                    this.$.pauseIcon.style.opacity = 0;
+                }
             }
         }
 

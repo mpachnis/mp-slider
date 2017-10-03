@@ -6,7 +6,11 @@
 
                 --white-color: #fff;
                 --caption-background: rgba(0, 0, 0, 0.5);
+                --pause-icon-background: #fff;
+                --pause-icon-stroke-color: #555;
+                --pause-icon-stroker-width: 10;
             }
+
             #container {
                 position: relative;
                 box-sizing: border-box;
@@ -17,6 +21,26 @@
                 position: relative;
                 overflow: hidden;
             }
+
+                #slider:hover {
+                    cursor: pointer;
+                }
+
+                #slider #pauseIcon {
+                    margin: 0 0 0 -75px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 10;
+                    opacity: 0;
+                    transition: all .4s ease-in-out;
+                }
+
+                    #slider #pauseIcon svg {
+                        fill: var(--pause-icon-background);
+                        stroke: var(--pause-icon-stroke-color);
+                        stroke-width: var(--pause-icon-stroker-width);
+                    }
 
             #slider > ::slotted(div) {
                 position: absolute;
@@ -36,7 +60,7 @@
                     position: relative;
                 }
 
-                ::slotted(.current) {
+                #slider ::slotted(.current) {
                     max-width: 100%;
                     width: 100%;
                     height: auto;
@@ -203,7 +227,7 @@
 
                         #thumbs div img:hover { cursor: pointer; transform: scale(1.14) }
 
-                    #thumbs .selected > img { transform: scale(1.14) }
+                    #thumbs .selected > img { transform: scale(1.14) -webkit-transform: scale(1.14) }
 
             @media (max-width: 568px) {
 
