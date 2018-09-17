@@ -1,7 +1,7 @@
 {
     "name": "mp-slider",
     "description": "A simple web component image slider build with Polymer 2.0",
-    "version": "2.0.0",
+    "version": "2.0.3",
     "homepage": "http://minas.pachnis.com",
     "authors": [
         "Minas Pachnis <minas@bugeffect.com>"

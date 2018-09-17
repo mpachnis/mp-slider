@@ -303,8 +303,12 @@
                     this._images[this.current].classList.remove("current");
                     this.current = this.current === this._images.length - 1 ? 0 : this.current + 1;
                     this._images[this.current].classList.add("current");
-                    this._changeBullet();
-                    this._changeThumb();
+                    if (this.bullets) {
+                        this._changeBullet();
+                    }
+                    if (this.showThumbs) {
+                        this._changeThumb();
+                    }
                 }, this.interval);
             }
 
