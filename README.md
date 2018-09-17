@@ -66,7 +66,7 @@ $ bower install --save mp-slider
 </mp-slider>
 ```
 
-Available styles for customization.
+Available styles.
 
 Properties | Description
 ---------- | -----------
@@ -74,6 +74,13 @@ Properties | Description
 --pause-icon-background | pause icon's background color
 --pause-icon-stroke-color | pause icon's color
 --pause-icon-stroker-width | pause icon's stroke width
+
+### Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
+
+![](http://info.saucelabs.com/rs/468-XBT-687/images/powered_by_sauce_labs_badges_white_1x.png)
+
 
 ## License
 
