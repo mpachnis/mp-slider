@@ -3,12 +3,6 @@
         <style>
             :root {
                 font-family: "Helvetica Neue", Helvetica;
-
-                --white-color: #fff;
-                --caption-background: rgba(0, 0, 0, 0.5);
-                --pause-icon-background: #fff;
-                --pause-icon-stroke-color: #555;
-                --pause-icon-stroker-width: 10;
             }
 
             #container {
@@ -37,9 +31,9 @@
                 }
 
                     #slider #pauseIcon svg {
-                        fill: var(--pause-icon-background);
-                        stroke: var(--pause-icon-stroke-color);
-                        stroke-width: var(--pause-icon-stroker-width);
+                        fill: var(--pause-icon-background, #fff);
+                        stroke: var(--pause-icon-stroke-color, #555);
+                        stroke-width: var(--pause-icon-stroker-width, 10);
                     }
 
             #slider > ::slotted(div) {

@@ -5,7 +5,7 @@
         <style>
             #caption {
                 width: 100%;
-                background: var(--caption-background);
+                background: var(--caption-background, rgba(0, 0, 0, 0.5));
                 padding: 5px 20px;
                 position: absolute;
                 bottom: 0;
@@ -13,7 +13,7 @@
                 transition: all 2s linear;
             }
 
-            #caption h3, #caption p { color: var(--white-color) }
+            #caption h3, #caption p { color: var(--white-color, #fff) }
 
             #caption h3 {
                 font-size: 20px;
@@ -50,5 +50,4 @@
 
         customElements.define(mpCaption.is, mpCaption);
     </script>
-
 </dom-module>

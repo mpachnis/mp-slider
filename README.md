@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/mpachnis/mp-slider.svg?branch=master)](https://travis-ci.org/mpachnis/mp-slider)  [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/mpachnis/mp-slider)
-  
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/mpachnismp-slider)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/mpachnismp-slider.svg)](https://vaadin.com/directory/component/mpachnismp-slider)
+
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/mpachnismp-slider) [![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/mpachnismp-slider.svg)](https://vaadin.com/directory/component/mpachnismp-slider)
 
 
 ## &lt;mp-slider&gt;
@@ -68,6 +67,16 @@ $ bower install --save mp-slider
     </div>
 </mp-slider>
 ```
+
+Available properties.
+
+Properties | Description | Default
+---------- | ----------- | -------
+controls | show the right/left arrow button for changing slide | false
+show-thumbs | show thumbnails under the slider | false
+bullets | show a number of bullets based on image length | false
+show-pause-icon | show a pause icon in the slider (hover) | false
+
 
 Available styles.
 
