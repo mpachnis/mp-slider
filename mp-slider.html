@@ -323,14 +323,18 @@
             _pauseAutoPlay() {
                 if (this.autoPlay) {
                     clearInterval(this._autoInternal);
-                    this.$.slider.querySelector('#pauseIcon').style.opacity = .5;
+                    if (this.showPauseIcon) {
+                        this.$.slider.querySelector('#pauseIcon').style.opacity = .5;
+                    }
                 }
             }
 
             _resumeAutoPlay() {
                 if(this.autoPlay) {
                     this._autoPlaySlider();
-                    this.$.slider.querySelector('#pauseIcon').style.opacity = 0;
+                    if (this.showPauseIcon) {
+                        this.$.slider.querySelector('#pauseIcon').style.opacity = 0;
+                    }
                 }
             }
         }
