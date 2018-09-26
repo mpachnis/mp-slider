@@ -1,6 +1,6 @@
 {
     "name": "mp-slider",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Is a web component image slider build with Polymer 2.0",
     "author": "Minas Pachnis <minas@bugeffect.com>",
     "license": "MIT",
